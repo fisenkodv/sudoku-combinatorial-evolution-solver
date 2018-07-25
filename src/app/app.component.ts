@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Problem, DifficultProblem } from './models/problem.model';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  public problem: Problem = DifficultProblem;
+
+  public getProblemValue(row: number, column: number): number {
+    return this.problem.values[row][column];
+  }
+
+  public getProblemIndexes(): number[] {
+    return this.problem.values.map((_, index) => index);
+  }
 }
