@@ -9,6 +9,12 @@ namespace SudokuCombinatorialEvolutionSolver
     public const int SIZE = 9;
     public const int BLOCK_SIZE = 3;
 
+    public static int[,] CreateMatrix(int m, int n)
+    {
+      var result = new int[m, n];
+      return result;
+    }
+
     public static (int row, int column) Corner(int block)
     {
       int r = -1, c = -1;
@@ -56,7 +62,6 @@ namespace SudokuCombinatorialEvolutionSolver
 
     public static int[,] RandomMatrix(Random rnd, int[,] problem)
     {
-      // fill each 3x3 block with 1-9
       var result = DuplicateMatrix(problem);
 
       for (var block = 0; block < SIZE; ++block)
@@ -64,7 +69,6 @@ namespace SudokuCombinatorialEvolutionSolver
         var corner = Corner(block);
         var values = Enumerable.Range(1, SIZE).ToList();
 
-        // shuffle
         for (var k = 0; k < values.Count; ++k)
         {
           var ri = rnd.Next(k, values.Count);
@@ -73,41 +77,34 @@ namespace SudokuCombinatorialEvolutionSolver
           values[ri] = tmp;
         }
 
-        // walk through block and remove from list starting numbers in problem
         var r = corner.row;
         var c = corner.column;
         for (var i = r; i < r + BLOCK_SIZE; ++i)
         {
           for (var j = c; j < c + BLOCK_SIZE; ++j)
           {
-            var v = problem[i, j];
-            if (v != 0) // a fixed starting number
-              values.Remove(v);
+            var value = problem[i, j];
+            if (value != 0)
+              values.Remove(value);
           }
         }
 
-        // walk through block and add values
-        var ptr = 0; // pointer into List
+        var pointer = 0;
         for (var i = r; i < r + BLOCK_SIZE; ++i)
         {
           for (var j = c; j < c + BLOCK_SIZE; ++j)
           {
             if (result[i, j] != 0) continue;
-            var v = values[ptr]; // get value from List
-            result[i, j] = v;
-            ++ptr; // move to next value in List
+            var value = values[pointer];
+            result[i, j] = value;
+            ++pointer;
           }
         }
-      } // each block, k
+      }
 
       return result;
     }
 
-    public static int[,] CreateMatrix(int m, int n)
-    {
-      var result = new int[m, n];
-      return result;
-    }
 
     public static int[,] DuplicateMatrix(int[,] matrix)
     {
@@ -152,7 +149,7 @@ namespace SudokuCombinatorialEvolutionSolver
       {
         for (var j = corner.column; j < corner.column + BLOCK_SIZE; ++j)
         {
-          if (problem[i, j] == 0) // a non-fixed value
+          if (problem[i, j] == 0)
             cells.Add(new[] {i, j});
         }
       }
