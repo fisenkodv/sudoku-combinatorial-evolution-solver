@@ -1,4 +1,4 @@
-# Solving Sudoku Using Combinatorial Evolution
+# Solving Sudoku Using Combinatorial Evolution Algorithm
 
-# License
+## License
 MIT
